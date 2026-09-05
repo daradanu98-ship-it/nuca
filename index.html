@@ -1,0 +1,519 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday 🎂</title>
+
+  <!-- Mengambil font menarik dari Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Fredoka:wght@600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      /* Menggunakan font Quicksand untuk tampilan teks umum */
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      color: white;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    .container {
+      padding: 40px 20px 80px 20px;
+    }
+
+    h1 {
+      /* Menggunakan font Fredoka yang ceria untuk judul utama */
+      font-family: 'Fredoka', cursive;
+      font-size: 50px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      text-shadow: 2px 4px 10px rgba(255, 107, 129, 0.5);
+      animation: muncul 2s ease;
+    }
+
+    h2 {
+      /* Menggunakan font Dancing Script yang elegan untuk sub-judul */
+      font-family: 'Dancing Script', cursive;
+      font-size: 38px;
+      font-weight: 700;
+      margin-top: 10px;
+      text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 b {
+      font-family: 'Fredoka', sans-serif;
+      color: #fff;
+      background: linear-gradient(45deg, #fff200, #ff6b81);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+    }
+
+    .ucapan {
+      max-width: 650px;
+      margin: 25px auto;
+      padding: 30px 25px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 24px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      font-size: 20px;
+      line-height: 1.8;
+      font-weight: 600;
+    }
+
+    .ucapan p {
+      margin: 15px 0;
+    }
+
+    .gallery {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .gallery img {
+      width: 200px;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 4px solid white;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      transition: all 0.4s ease;
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .gallery img:hover {
+      transform: scale(1.08) rotate(2deg);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    }
+
+    button {
+      font-family: 'Fredoka', sans-serif;
+      margin-top: 30px;
+      padding: 16px 36px;
+      border: none;
+      border-radius: 30px;
+      background: white;
+      color: #ff6b81;
+      font-size: 19px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(255, 107, 129, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 10px 25px rgba(255, 107, 129, 0.6);
+    }
+
+    /* Pemutar Musik Unik floating di pojok kanan atas */
+    .music-player-widget {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 8px 18px 8px 10px;
+      border-radius: 40px;
+      box-shadow: 0 8px 25px rgba(255, 107, 129, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+      border: 2px solid white;
+    }
+
+    .music-player-widget:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 12px 30px rgba(255, 107, 129, 0.4);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .disc-container {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .disc {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, #333 30%, #111 70%, #ff6b81 100%);
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+      position: absolute;
+      animation: rotateDisc 4s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .disc::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 12px;
+      height: 12px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .playing .disc {
+      animation-play-state: running;
+    }
+
+    .play-icon-overlay {
+      position: absolute;
+      z-index: 2;
+      color: #ff6b81;
+      font-size: 18px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      transition: transform 0.2s ease;
+    }
+
+    .music-info {
+      text-align: left;
+    }
+
+    .music-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 13px;
+      color: #ff6b81;
+      font-weight: 600;
+      line-height: 1.1;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .music-status {
+      font-size: 11px;
+      color: #888;
+      font-weight: 600;
+    }
+
+    /* Efek Gelombang Musik saat Lagu Diputar */
+    .sound-wave {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 12px;
+      margin-left: 6px;
+    }
+
+    .sound-wave span {
+      width: 3px;
+      height: 100%;
+      background: #ff6b81;
+      border-radius: 3px;
+      animation: wave 1.2s ease-in-out infinite alternate;
+      animation-play-state: paused;
+    }
+
+    .sound-wave span:nth-child(1) { animation-delay: 0.1s; }
+    .sound-wave span:nth-child(2) { animation-delay: 0.3s; }
+    .sound-wave span:nth-child(3) { animation-delay: 0.5s; }
+
+    .playing .sound-wave span {
+      animation-play-state: running;
+    }
+
+    @keyframes wave {
+      0% { height: 3px; }
+      100% { height: 12px; }
+    }
+
+    @keyframes rotateDisc {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 25px;
+      animation: naik 5s linear forwards;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Modal Popup khusus pengganti alert */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: white;
+      color: #ff6b81;
+      padding: 30px 25px;
+      border-radius: 24px;
+      max-width: 90%;
+      width: 380px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    .modal-overlay.active .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-box p {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 20px 0;
+      line-height: 1.5;
+    }
+
+    .modal-btn {
+      font-family: 'Fredoka', sans-serif;
+      background: #ff6b81;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      font-size: 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 0;
+      box-shadow: 0 4px 12px rgba(255, 107, 129, 0.3);
+    }
+
+    @keyframes muncul {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes naik {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-110vh);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 36px;
+      }
+
+      h2 {
+        font-size: 30px;
+      }
+
+      .ucapan {
+        font-size: 17px;
+        padding: 20px 15px;
+      }
+
+      .gallery img {
+        width: 140px;
+        height: 180px;
+      }
+
+      .music-player-widget {
+        top: 12px;
+        right: 12px;
+        padding: 6px 14px 6px 8px;
+      }
+
+      .disc-container {
+        width: 36px;
+        height: 36px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Pemutar Musik Mengambang -->
+  <div class="music-player-widget" id="musicWidget" onclick="toggleMusic()">
+    <div class="disc-container">
+      <div class="disc"></div>
+      <div class="play-icon-overlay" id="playIcon">▶</div>
+    </div>
+    <div class="music-info">
+      <div class="music-title">
+        <span>Musik Ulang Tahun</span>
+        <div class="sound-wave">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="music-status" id="musicStatus">Klik untuk Putar</div>
+    </div>
+  </div>
+
+  <!-- Element Audio Musik (Bisa ganti src="lagu.mp3" jika punya file sendiri) -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="nuca.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="container">
+
+    <h1>🎂 HAPPY BIRTHDAY 🎂</h1>
+
+    <!-- GANTI NAMA DI SINI -->
+    <h2>Selamat Ulang Tahun, <b>bububbbbkuuuu</b> 🎉</h2>
+
+    <div class="ucapan">
+      <p>
+        💖🎈 Selamat ulang tahun! 🎈💖
+      </p>
+
+      <p>
+        Semoga di umur yang baru ini kamu selalu diberikan
+        kesehatan, kebahagiaan, dan kesuksesan.
+        Semoga semua impian dan harapanmu bisa tercapai.
+      </p>
+
+      <p>
+        Terima kasih sudah menjadi seseorang yang luar biasa.
+        Jangan pernah berhenti tersenyum dan teruslah menjadi
+        versi terbaik dari dirimu sendiri. 💖
+      </p>
+
+      <p>
+        🎁 Have a wonderful birthday! 🎁
+      </p>
+    </div>
+
+    <h2>📸 Kenangan Kita 📸</h2>
+
+    <div class="gallery">
+
+      <!-- GANTI FOTO DI SINI -->
+      <img src="foto1.jpg" alt="Foto 1" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&auto=format&fit=crop&q=80';">
+
+      <img src="foto2.jpg" alt="Foto 2" onerror="this.onerror=null; this.src='';">
+
+      <img src="foto3.jpg" alt="Foto 3" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&auto=format&fit=crop&q=80';">
+
+      <img src="foto4.jpg" alt="Foto 4" onerror="this.onerror=null; this.src='';">
+
+    </div>
+
+    <button onclick="buatHati()">
+      💖 Klik untuk kejutan 💖
+    </button>
+
+  </div>
+
+  <!-- Modal Popup Pengganti Alert -->
+  <div class="modal-overlay" id="customModal">
+    <div class="modal-box">
+      <p id="modalText"></p>
+      <button class="modal-btn" onclick="tutupModal()">Tutup</button>
+    </div>
+  </div>
+
+  <script>
+    const music = document.getElementById("bgMusic");
+    const widget = document.getElementById("musicWidget");
+    const playIcon = document.getElementById("playIcon");
+    const musicStatus = document.getElementById("musicStatus");
+
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+        widget.classList.add("playing");
+        playIcon.innerText = "❚❚";
+        musicStatus.innerText = "Sedang Diputar";
+      } else {
+        music.pause();
+        widget.classList.remove("playing");
+        playIcon.innerText = "▶";
+        musicStatus.innerText = "Diberhentikan";
+      }
+    }
+
+    function buatHati() {
+      // Otomatis putar lagu jika belum berjalan saat tombol diklik
+      if (music.paused) {
+        toggleMusic();
+      }
+
+      for (let i = 0; i < 30; i++) {
+
+        const heart = document.createElement("div");
+
+        heart.className = "heart";
+        heart.innerHTML = "💖";
+
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration =
+          (3 + Math.random() * 3) + "s";
+
+        heart.style.fontSize =
+          (15 + Math.random() * 25) + "px";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+          heart.remove();
+        }, 6000);
+      }
+
+      tampilkanModal("🎉 Sekali lagi, Selamat Ulang Tahun! bububbbbkuuuu 🎂💖");
+    }
+
+    function tampilkanModal(pesan) {
+      document.getElementById("modalText").innerText = pesan;
+      document.getElementById("customModal").classList.add("active");
+    }
+
+    function tutupModal() {
+      document.getElementById("customModal").classList.remove("active");
+    }
+  </script>
+
+</body>
+</html>
+```
